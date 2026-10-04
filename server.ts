@@ -40,7 +40,7 @@ app.use("/api/enquiries", enquiryRoutes);
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Node Express server is running",
+    message: "Node Express server is running new",
   });
 });
 
