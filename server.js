@@ -5,6 +5,8 @@ const cors = require("cors");
 
 const { connectDB } = require("./config/database");
 const enquiryRoutes = require("./routes/enquiry.routes");
+const productsRoutes = require("./routes/product.routes");
+
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.get("/api/health", (req, res) => {
 
 // Routes
 app.use("/api/enquiries", enquiryRoutes);
+app.use("/api/products", productsRoutes);
+
 
 const PORT = Number(process.env.PORT) || 5000;
 
