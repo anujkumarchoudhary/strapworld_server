@@ -1,16 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
 
-export interface IEnquiry extends Document {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  agree: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
+const mongoose = require("mongoose");
 
-const enquirySchema = new Schema<IEnquiry>(
+const enquirySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -41,7 +32,7 @@ const enquirySchema = new Schema<IEnquiry>(
       type: Boolean,
       required: true,
       validate: {
-        validator: (value: boolean) => value === true,
+        validator: (value) => value === true,
         message: "You must agree to the terms.",
       },
     },
@@ -51,4 +42,6 @@ const enquirySchema = new Schema<IEnquiry>(
   }
 );
 
-export default mongoose.model<IEnquiry>("Enquiry", enquirySchema);
+const Enquiry = mongoose.model("Enquiry", enquirySchema);
+
+module.exports = Enquiry;

@@ -1,17 +1,12 @@
-import { Request, Response } from "express";
 
-import Enquiry from "../model/enquiry.model"
-import { sendEnquiryEmail } from "../services/email.service";
-
+const Enquiry = require("../model/enquiry.model");
+const { sendEnquiryEmail } = require("../services/email.service");
 
 // ============================================
 // CREATE ENQUIRY
 // ============================================
 
-export const createEnquiry = async (
-  req: Request,
-  res: Response
-) => {
+const createEnquiry = async (req, res) => {
   try {
     const {
       name,
@@ -20,7 +15,6 @@ export const createEnquiry = async (
       message,
       agree,
     } = req.body;
-
 
     // ----------------------------------------
     // VALIDATION
@@ -34,7 +28,6 @@ export const createEnquiry = async (
       });
     }
 
-
     if (agree !== true) {
       return res.status(400).json({
         success: false,
@@ -42,7 +35,6 @@ export const createEnquiry = async (
           "You must agree before submitting the enquiry.",
       });
     }
-
 
     // ----------------------------------------
     // CREATE ENQUIRY
@@ -55,7 +47,6 @@ export const createEnquiry = async (
       message,
       agree,
     });
-
 
     // ----------------------------------------
     // SEND EMAIL
@@ -73,9 +64,7 @@ export const createEnquiry = async (
       console.log(
         `📧 Enquiry email sent successfully for ${email}`
       );
-
     } catch (emailError) {
-
       // Email failed, but enquiry is already
       // safely stored in MongoDB.
 
@@ -84,7 +73,6 @@ export const createEnquiry = async (
         emailError
       );
     }
-
 
     // ----------------------------------------
     // RESPONSE
@@ -97,7 +85,6 @@ export const createEnquiry = async (
     });
 
   } catch (error) {
-
     console.error(
       "❌ Create enquiry error:",
       error
@@ -111,21 +98,15 @@ export const createEnquiry = async (
   }
 };
 
-
 // ============================================
 // GET ALL ENQUIRIES
 // ============================================
 
-export const getEnquiries = async (
-  _req: Request,
-  res: Response
-) => {
+const getEnquiries = async (req, res) => {
   try {
-
     const enquiries = await Enquiry
       .find()
       .sort({ createdAt: -1 });
-
 
     return res.status(200).json({
       success: true,
@@ -134,7 +115,6 @@ export const getEnquiries = async (
     });
 
   } catch (error) {
-
     console.error(
       "❌ Get enquiries error:",
       error
@@ -147,21 +127,15 @@ export const getEnquiries = async (
   }
 };
 
-
 // ============================================
 // GET SINGLE ENQUIRY
 // ============================================
 
-export const getEnquiryById = async (
-  req: Request,
-  res: Response
-) => {
+const getEnquiryById = async (req, res) => {
   try {
-
     const enquiry = await Enquiry.findById(
       req.params.id
     );
-
 
     if (!enquiry) {
       return res.status(404).json({
@@ -170,14 +144,12 @@ export const getEnquiryById = async (
       });
     }
 
-
     return res.status(200).json({
       success: true,
       data: enquiry,
     });
 
   } catch (error) {
-
     console.error(
       "❌ Get enquiry error:",
       error
@@ -190,17 +162,12 @@ export const getEnquiryById = async (
   }
 };
 
-
 // ============================================
 // UPDATE ENQUIRY
 // ============================================
 
-export const updateEnquiry = async (
-  req: Request,
-  res: Response
-) => {
+const updateEnquiry = async (req, res) => {
   try {
-
     const enquiry = await Enquiry.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -210,14 +177,12 @@ export const updateEnquiry = async (
       }
     );
 
-
     if (!enquiry) {
       return res.status(404).json({
         success: false,
         message: "Enquiry not found.",
       });
     }
-
 
     return res.status(200).json({
       success: true,
@@ -226,7 +191,6 @@ export const updateEnquiry = async (
     });
 
   } catch (error) {
-
     console.error(
       "❌ Update enquiry error:",
       error
@@ -239,21 +203,15 @@ export const updateEnquiry = async (
   }
 };
 
-
 // ============================================
 // DELETE ENQUIRY
 // ============================================
 
-export const deleteEnquiry = async (
-  req: Request,
-  res: Response
-) => {
+const deleteEnquiry = async (req, res) => {
   try {
-
     const enquiry = await Enquiry.findByIdAndDelete(
       req.params.id
     );
-
 
     if (!enquiry) {
       return res.status(404).json({
@@ -262,14 +220,12 @@ export const deleteEnquiry = async (
       });
     }
 
-
     return res.status(200).json({
       success: true,
       message: "Enquiry deleted successfully.",
     });
 
   } catch (error) {
-
     console.error(
       "❌ Delete enquiry error:",
       error
@@ -280,4 +236,16 @@ export const deleteEnquiry = async (
       message: "Failed to delete enquiry.",
     });
   }
+};
+
+// ============================================
+// EXPORTS
+// ============================================
+
+module.exports = {
+  createEnquiry,
+  getEnquiries,
+  getEnquiryById,
+  updateEnquiry,
+  deleteEnquiry,
 };

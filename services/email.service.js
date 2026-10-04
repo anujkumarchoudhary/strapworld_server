@@ -1,20 +1,12 @@
-import transporter from "../config/mailer";
+const transporter = require("../config/mailer");
 
-interface EnquiryEmailData {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  agree: boolean;
-}
-
-export const sendEnquiryEmail = async ({
+const sendEnquiryEmail = async ({
   name,
   email,
   phone,
   message,
   agree,
-}: EnquiryEmailData) => {
+}) => {
   if (!process.env.MAIL_FROM) {
     throw new Error("MAIL_FROM is not defined");
   }
@@ -245,16 +237,19 @@ export const sendEnquiryEmail = async ({
   await transporter.sendMail(mailOptions);
 };
 
-
 /**
  * Escape user-provided data before inserting it
  * into the HTML email.
  */
-const escapeHtml = (value: string) => {
+const escapeHtml = (value) => {
   return value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+};
+
+module.exports = {
+  sendEnquiryEmail,
 };
